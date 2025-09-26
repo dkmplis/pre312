@@ -30,6 +30,7 @@ public class AdminController {
         this.userService = userService;
         this.roleService = roleService;
     }
+
     @GetMapping("/")
     public String index(Model model) {
         model.addAttribute("users", userService.getAll());
@@ -38,16 +39,18 @@ public class AdminController {
 
     @GetMapping("/new")
     public String newUserPage(Model model) {
-        model.addAttribute("roles", roleService.getAll());
         model.addAttribute("user", new User());
+        model.addAttribute("roles", roleService.getAll());
         return "admin/new";
     }
 
     @PostMapping("/new")
-    public String addNewUserByAnAdmin(@ModelAttribute("user") @Valid User user,
-                             @RequestParam(value = "rolesId") List<Integer> rolesId,
-                                      BindingResult bindingResult) {
+    public String addNewUserByAnAdmin(@Valid @ModelAttribute("user") User user,
+                                      BindingResult bindingResult,
+                                      @RequestParam(value = "rolesId", required = false) List<Integer> rolesId,
+                                      Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("roles", roleService.getAll());
             return "admin/new";
         }
         User newUser = userService.addRoles(user, rolesId);
@@ -70,18 +73,18 @@ public class AdminController {
     }
 
     @PatchMapping("/edit")
-    public String update(@ModelAttribute @Valid User user,
-                         @RequestParam(value = "id") int id,
-                         @RequestParam(required = false, value = "rolesId") List<Integer> rolesId,
-                         BindingResult bindingResult) {
+    public String update(@Valid @ModelAttribute User user,
+                         BindingResult bindingResult,
+                         @RequestParam(value = "rolesId") List<Integer> rolesId,
+                         Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("roles", roleService.getAll());
             return "admin/edit";
         }
         User updatesUser = userService.addRoles(user, rolesId);
-        userService.update(id, updatesUser);
+        userService.update(user.getId(), updatesUser);
         return "redirect:/admin/";
     }
-
 
 
 }

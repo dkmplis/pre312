@@ -2,7 +2,6 @@ package ru.kata.spring.boot_security.demo.model;
 
 
 import org.hibernate.proxy.HibernateProxy;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,10 +16,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -33,32 +30,25 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "username")
-    @NotBlank(message = "Fill in the field!")
+    @Column(name = "name")
     @Size(min = 3, message = "Minimum 3 characters!")
-    private String username;
+    private String name;
 
     @Column(name = "password")
-    @NotBlank(message = "Fill in the field!")
     @Size(min = 3, message = "Minimum 3 characters!")
     private String password;
 
     @Column(name = "email")
-    @Email(message = "enter email")
+    @Email(message = "enter email!")
     private String email;
 
     @ManyToMany()
     @JoinTable(name = "users_roles",
-                joinColumns = @JoinColumn(name = "user_id"),
-                inverseJoinColumns = @JoinColumn(name = "role_id"))
-    @Column(name = "role")
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
-    public User() {}
-
-    public User(String username, String email) {
-        this.username = username;
-        this.email = email;
+    public User() {
     }
 
     @Override
@@ -74,7 +64,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
     @Override
@@ -97,13 +87,6 @@ public class User implements UserDetails {
         return true;
     }
 
-    public void setRole(Role role) {
-        if(roles == null) {
-            roles = new HashSet<>();
-        }
-        roles.add(role);
-    }
-
     public Set<Role> getRoles() {
         return roles;
     }
@@ -112,6 +95,13 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public int getId() {
         return id;
@@ -121,20 +111,16 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     @Override
@@ -153,7 +139,7 @@ public class User implements UserDetails {
     @Override
     public int hashCode() {
         return this instanceof HibernateProxy ?
-                ((HibernateProxy)this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+                ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 
 

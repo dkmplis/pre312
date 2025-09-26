@@ -12,7 +12,7 @@ import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
-public class RoleService implements Services<Role>{
+public class RoleService implements Services<Role> {
 
     private final RoleRepository roleRepository;
 
@@ -20,6 +20,7 @@ public class RoleService implements Services<Role>{
     public RoleService(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
     }
+
     @Override
     public List<Role> getAll() {
         return roleRepository.findAll();
@@ -51,7 +52,7 @@ public class RoleService implements Services<Role>{
     }
 
     @Override
-    public Role findByUserName(String username) {
+    public Role findByEmail(String username) {
         return roleRepository.findByName(username)
                 .orElseThrow(EntityNotFoundException::new);
     }

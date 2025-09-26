@@ -21,7 +21,8 @@ public class Role implements GrantedAuthority {
     @Column(name = "name")
     private String name;
 
-    public Role(){}
+    public Role() {
+    }
 
     public Role(String name) {
         this.name = name;
@@ -60,7 +61,7 @@ public class Role implements GrantedAuthority {
     @Override
     public int hashCode() {
         return this instanceof HibernateProxy ?
-                ((HibernateProxy)this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+                ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 
     @Override

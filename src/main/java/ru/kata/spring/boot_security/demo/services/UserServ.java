@@ -37,9 +37,6 @@ public class UserServ implements Services<User> {
 
     @Transactional
     public void addNew(User user) {
-        Role role = roleRepository.findByName("ROLE_USER")
-                .orElseThrow(EntityNotFoundException::new);
-        user.setRole(role);
         userRepository.save(user);
     }
 
@@ -50,20 +47,18 @@ public class UserServ implements Services<User> {
 
     @Transactional
     public void update(int id, User updatedUser) {
-        User user = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        updatedUser.setPassword(user.getPassword());
         updatedUser.setId(id);
         userRepository.save(updatedUser);
     }
 
-    public User findByUserName(String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Username not found!"));
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Email not found!"));
     }
 
     public User addRoles(User user, List<Integer> rolesId) {
         HashSet<Role> selectedRoles = new HashSet<>();
-        if(rolesId != null) {
+        if (rolesId != null) {
             for (int roleId : rolesId) {
                 Role role = roleRepository.findById(roleId)
                         .orElseThrow(EntityNotFoundException::new);

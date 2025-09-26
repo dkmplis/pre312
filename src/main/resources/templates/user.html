@@ -5,10 +5,10 @@
 </head>
 <body>
 <h1>User, welcome spring boot security page!</h1>
+<p th:text="${user.getName()}"/>
 <p th:text="${user.getUsername()}"/>
-<p th:text="${user.getEmail()}"/>
 <div th:each="role : ${user.getRoles()}">
-    <p th:text="${role}"/>
+    <p th:text="${role.getAuthority()}"/>
 </div>
 <form th:action="@{logout}">
     <input type="submit" value="logout"/>
