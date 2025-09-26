@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit</title>
+</head>
+<body>
+<form th:method="PATCH" th:action="@{/admin/edit}" th:object="${user}">
+    <input type="hidden" name="id" th:value="${user.id}"/>
+    <label for="fullName">Enter new name:</label>
+    <input type="text" th:field="*{username}" id="fullName"/>
+    <div style="color:red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">error</div>
+    <br>
+    <label for="email">Enter new email:</label>
+    <input type="text" th:field="*{email}" id="email"/>
+    <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">error</div>
+    <br>
+    <div>
+        <label>Roles:</label>
+        <div th:each="role : ${roles}">
+            <input type="checkbox"
+                   name="rolesId"
+                   th:value="${role.getId()}"
+                   th:checked="${user.getRoles().contains(role)}"
+                   th:id="'role_' + ${role.getId()}"/>
+            <label th:for="'role_' + ${role.getId()}"
+                   th:text="${role.getAuthority()}">
+            </label>
+        </div>
+    </div>
+    <input type="submit" value="Ok"/>
+</form>
+</body>
+</html>
