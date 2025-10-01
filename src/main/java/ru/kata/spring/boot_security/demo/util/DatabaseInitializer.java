@@ -17,7 +17,6 @@ public class DatabaseInitializer {
     private final UserService userService;
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
-    private boolean initialized;
 
     @Autowired
     public DatabaseInitializer(UserService userService, RoleService roleService, PasswordEncoder passwordEncoder) {
@@ -30,28 +29,28 @@ public class DatabaseInitializer {
     @PostConstruct
     @Transactional
     public void init() {
-        if (initialized || !userService.getAll().isEmpty()) {
-            return;
-        }
         initializeRoles();
         initializeUsers();
-        initialized=true;
     }
 
     private void initializeRoles() {
+        if (roleService.getAll().isEmpty()) {
             Role admin = new Role("ROLE_ADMIN");
             roleService.addNew(admin);
             Role user = new Role("ROLE_USER");
             roleService.addNew(user);
+        }
     }
 
     private void initializeUsers() {
-        Role adminRole = roleService.findByName("ROLE_ADMIN");
-        Role userRole = roleService.findByName("ROLE_USER");
-        User userAdmin = new User("admin", passwordEncoder.encode("admin"), "admin@mail.ru", adminRole);
-        userService.addNew(userAdmin);
-        User userUser = new User("user", passwordEncoder.encode("user"), "user@mail.ru", userRole);
-        userService.addNew(userUser);
+        if (userService.getAll().isEmpty()) {
+            Role adminRole = roleService.findByName("ROLE_ADMIN");
+            Role userRole = roleService.findByName("ROLE_USER");
+            User userAdmin = new User("admin", passwordEncoder.encode("admin"), "admin@mail.ru", adminRole);
+            userService.addNew(userAdmin);
+            User userUser = new User("user", passwordEncoder.encode("user"), "user@mail.ru", userRole);
+            userService.addNew(userUser);
+        }
 
     }
 }
