@@ -15,7 +15,9 @@
     <input type="text" th:field="*{email}" id="email"/>
     <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">error</div>
     <br>
-    <input type="hidden" th:field="*{password}" th:value="${user.getPassword()}"/>
+    <label for="password">Enter new password:</label>
+    <input type="text" th:field="*{password}" id="password"/>
+    <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">error</div>
     <div>
         <label>Roles:</label>
         <div th:each="role : ${roles}">

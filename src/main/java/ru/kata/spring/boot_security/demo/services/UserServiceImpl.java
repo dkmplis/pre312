@@ -13,16 +13,17 @@ import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 import javax.persistence.EntityNotFoundException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
 @Transactional(readOnly = true)
-public class UserServ implements Services<User> {
+public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
 
     @Autowired
-    public UserServ(UserRepository userRep, RoleRepository roleRepository) {
+    public UserServiceImpl(UserRepository userRep, RoleRepository roleRepository) {
         this.userRepository = userRep;
         this.roleRepository = roleRepository;
     }
@@ -68,4 +69,8 @@ public class UserServ implements Services<User> {
         user.setRoles(selectedRoles);
         return user;
     }
+    public Optional<User> findByEmailForValid(String email) {
+        return userRepository.findByEmail(email);
+    }
+
 }

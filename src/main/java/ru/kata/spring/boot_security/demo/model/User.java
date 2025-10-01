@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -49,6 +50,16 @@ public class User implements UserDetails {
     private Set<Role> roles;
 
     public User() {
+    }
+
+    public User(String name, String password, String email, Role role) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        if (roles==null) {
+            roles = new HashSet<>();
+        }
+        roles.add(role);
     }
 
     @Override
